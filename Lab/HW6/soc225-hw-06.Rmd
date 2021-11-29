@@ -1,0 +1,41 @@
+---
+title: "Homework 6"
+subtitle: "Soc 225: Data & Society"
+author: "PUT YOUR NAME HERE"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: true
+---
+Write all code in the chunks provided!
+
+Remember to unzip to a real directory before running everything!
+
+This homework is for extra credits. Problems should be roughly analogous to what we've done in previous labs, with a few extensions. If you can't figure it out, go to google/stack exchange/ask a friend. Finally, email your TA or come to office hours.
+
+# Problem 1. Manipulating and analyzing data
+
+Pick something to look at in the `nycflights13` data and write up in the below chunks showing your investigation (use as many chunks as you'd like). You must use at least once: `mutate()`, `summarize()`, `group_by()`, and any join. Include at least one nicely formatted plot (`ggplot2`). In your plots, use “nice” variable names (try out spaces!) and rounded values (<= 3 digits).
+
+This time, include all your code in your output document (echo=TRUE), using comments and line breaks separating commands so that it is clear to others what you are doing (or trying to do!). You must write up your observations briefly in words as well.
+
+Note: If you want to see the `nycflights13` data frames in the environment, you will need to load each one: `airlines`, `airports`, `flights`, `planes`, and `weather` (e.g. data(flights)).
+
+```{r}
+
+```
+
+
+# Problem 2. Text as data
+
+Using the `toronto_tweets` dataset, count the proportion of tweets that mention Doug Ford, stratified by whether or not they also mention vaccines.
+
+```{r}
+
+```
+
+# Problem 3. Your own data
+
+Now go back to your data that you've been working on throughout this quarter. Given what you know about the data and the variation of variables, write a hypothesis about a relationship you had in mind. 
+
+Further, try to come up with a statistical model (for example, `z ~ x + y`) to represent this relationship. Use `lm` or `glm` to try out your model. Print a summary of the results, and, if you're ambitious, try to visualize them. See http://socviz.co/modeling.html and http://r4ds.had.co.nz/model-basics.html for how to do that.

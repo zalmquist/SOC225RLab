@@ -1,0 +1,211 @@
+---
+title: "Lab5: Merge data"
+subtitle: "Soc 225: Data & Society"
+author: "[PUT YOUR NAME HERE]"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: true
+---
+
+# Agenda
+- Audits of political advertising on Facebook
+- Combine and join data sets
+  - Setup and data
+  - Append data
+  - Merge data sets
+- More practice
+  - Snapshots and impressions
+  - Challenge
+
+
+# 1. Audits of political advertising on Facebook
+
+There are two different databases of advertisements with political content on Facebook. 
+
+First, from ProPublica: http://projects.propublica.org/facebook-ads/
+
+Second, from Facebook: https://www.facebook.com/politicalcontentads/
+
+ProPublica offers its data for download in a csv; Facebook does not. However, researchers from NYU have scraped data from the Facebook database, and they have publicized it for researchers. You can read about their research in the New York Times here, in an [article](https://www.nytimes.com/2018/07/17/technology/political-ads-facebook-trump.html) that provides context for the creation of the database. You may also read their full report [here](https://github.com/online-pol-ads/FBPoliticalAds/blob/master/docs/Facebooks-archive.pdf).
+
+Spend a few minutes on each database webpage. Search for and look at different ads, then answer these questions about data provenance:
+
+**Question 1.1. Why do you think there are there two databases of political ads on Facebook?**
+
+**Question 1.2. What's different about how these databases were created and how ads were added to them?**
+
+**Question 1.3. What kinds of things can you search for? Which, in your opinion, is easier to use? Which is more transparent?**
+
+# 2. Combine and join datasets
+
+## Setup and data
+
+We will setup the package and data sets used in this lab. 
+
+**Question 2.1. Load package `tidyverse`.**
+
+```{r}
+
+```
+
+We will use data from the Online Political Ads Transparency Project, by Laura Edelson, Shikhar Sakhuja, and Damon McCoy from NYU. Their project homepage is here: https://online-pol-ads.github.io/ 
+
+All of the csv files we'll use are stored on this page: 
+https://github.com/online-pol-ads/FBPoliticalAds/tree/master/RawContentFiles
+
+You can download the csv files using their urls, or download the entire repository and put the data in a data subfolder of your lab project. 
+
+**Question 2.2. Ads data. Download files "ads.csv", "ads2.csv" and "ads3.csv" and read them into R. Name them "ads", "ads2" and "ads3" respectively.**
+
+```{r}
+
+```
+
+**Question 2.3. Ads sponsor data. Download file "ad_sponsors.csv" and read into R. Name it "ad_sponsors".**
+
+```{r}
+
+```
+
+**Question 2.4. Snapshots data. Download file "snapshots.csv" and read into R. Name it "snapshots".**
+
+```{r}
+
+```
+
+**2.5. Examine each data frame to understand the main variables and what each row represents.**
+
+## Apend data: combine more of the same data. 
+
+We'll start by looking at the ads data.
+
+If different data frames are just more observations of the same data, you can stack them on top of each other using `bind_rows`. The data frames need to have the same columns!
+
+```{r}
+ads_example <- bind_rows(ads,ads2)
+```
+
+**Question 2.6. Create a new data frame "ads_all" by stacking ads, ads2 and ads3.**
+
+```{r}
+ads_all <- bind_rows(ads, ads2, ads3)
+```
+
+**Question 2.7. Use glimpse(), dim() to see how well it worked.**
+```{r}
+glimpse(ads_all)
+dim(ads_all)
+```
+
+Let's take a look at the number of unique IDs. Do you notice anything unusual?
+```{r}
+length(unique(ads_all$nyu_id))
+```
+
+## Merge data sets
+
+We'll want to join tables when we:
+- want to make columns using criteria too complicated for `ifelse()` or `case_when()`.
+  - we can work with small sets of variables then combine them back together.
+- combine data stored in separate data sets: e.g. UW registrar data with police stop records.
+  - often large surveys are broken into different data sets for each level (e.g. household, individual, neighborhood)
+
+We need to think about the following when we want to merge data frames `A` and `B`:
+- which *rows* are we keeping from each data frame?
+- which *columns* are we keeping from each data frame?
+- which variables determine whether rows *match*?
+
+There are many types of joins but usually `left_join()` does the job. For a complete understanding of different kinds of joins, you can read [here](https://r4ds.had.co.nz/relational-data.html#understanding-joins). 
+
+- `A %>% left_join(B)`: keep all rows from `A`, matched with `B` wherever possible (`NA` when not), keep columns from both `A` and `B`.
+
+In the political ads data, each ad has a sponsor: 
+
+```{r}
+head(ad_sponsors)
+```
+
+**Question 2.8. Take a look at `ads_all`: which column contains sponsor information?**
+
+First, let's rename the columns of `ad_sponsors` to make them clearer: 
+
+```{r}
+colnames(ad_sponsors) <- c("ad_sponsor_id", "ad_sponsor_name")
+```
+
+We want to keep all the rows of `ads_all`, so we use a *left* join: 
+
+```{r}
+ads_with_sponsors <- left_join(ads_all, ad_sponsors)
+```
+
+Now we can ask, which sponsors have the most different ads? 
+
+**Question 2.9. Work on ads_with_sponsors. Which sponsors have the most number of ads? List out the 10 sponsors with the most ads in a descending order. Pay attention to how to deal with NA.**
+*Hint at the bottom of the file.*
+
+```{r}
+
+```
+
+# 3. More practice
+
+## Snapshots and impressions
+
+Next, we'll combine our ad and sponsor information with `snapshots` data on the price and number of impressions for each ad. 
+
+Let's first clean up a little bit.
+```{r}
+# removing columns that are redundant
+# note: `nyu_id` means something different in each data set!
+ads_with_sponsors <- 
+  ads_with_sponsors %>%
+  select(-c(id, start_date, end_date, nyu_id))
+```
+
+Rather than renaming a column, we can use the `by` argument to specify which columns to use as keys to join by. 
+
+**Question 3.1. Which columns in `snapshots` and `ads_with_sponsors` should be use as key to join? Check the help file to see how to use `by` within `left_join`.**
+
+```{r}
+
+```
+
+**Question 3.2. Group by name of the ad sponsors, calculate the sum of `min_impressions` and `min_spend` respectively.**
+
+```{r}
+
+```
+
+**Question 3.3. Plot the relationship between sum of `min_spend` and sum of `min_impressions`. What kind of plot best represents the relationship? Do you see any pattern?**
+
+```{r}
+
+```
+
+**Question 3.4. Write code to show the *top 25* sponsors by number of impressions, using `arrange` and `head`.**
+
+```{r}
+
+```
+
+## Challenge
+
+Do some of these sponsors seem to be the same or a closely related political entity? Which ones?
+
+`demo_group.csv` and `snapshot_demo.csv` contain information on impressions broken down by demographic groups. See if you can join these to the snapshot information from above to break down sponsors by impressions. Be careful about what order you join data in. You may want to use `right_join` as well as `left_join`. 
+
+R4DS has a drawing of the different tables in the `nycflights13` data showing how they relate (https://r4ds.had.co.nz/relational-data.html#nycflights13-relational); consider sketching out something similar for the political ads data as you work with more tables. 
+
+What do the impressions for the Planned Parenthood Federation of America look like for different demographic groups? Which groups does the NRA target? Are they different?
+
+```{r}
+
+```
+
+Hint:
+2.9. A straight forward way is to count the number of rows for each sponsor and arrange them in a descending order.
+
+# References
+Charles Lanfear, [Introduction to R for Social Scientists](https://clanfear.github.io/CSSS508/)

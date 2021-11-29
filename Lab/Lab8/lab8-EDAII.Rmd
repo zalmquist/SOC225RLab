@@ -1,0 +1,308 @@
+---
+title: "Lab8: Exploratory data analysis II"
+subtitle: "Soc 225: Data & Society"
+author: "[PUT YOUR NAME HERE]"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: true
+---
+
+# Agenda
+
+- Introduction
+- COMPAS recidivism scores
+  - Setup
+  - Group comparisons
+- PASSNYC schools data
+  - Get and clean the data
+  - Advanced mutate
+  - Scatterplot and smoothing
+  - Hypothesis testing
+- Self exploration
+- Challenge: run and visualize a model
+- References
+  
+# 1: Exploratory Data Analysis
+
+In this module we'll continue practicing with exploratory data analysis. In addition to visualizing the distribution of a single variable and the relationship between multiple variables, we will also learn new `dplyr` verbs and try to build hypothesis and models to explore our data.
+
+We'll practice doing this with two new data sets related to algorithms and bias. 
+
+# 2: COMPAS recidivism scores  
+
+ProPublica wrote a story called "Machine Bias" about the COMPAS algorithm, which is meant to predict recidivism, or how likely it is that someone previously convicted of a crime will break the law again. COMPAS is used to guide criminal sentencing: https://www.propublica.org/article/machine-bias-risk-assessments-in-criminal-sentencing  
+
+They did a statistical analysis of racial disparities and wrote up those results here: https://www.propublica.org/article/how-we-analyzed-the-compas-recidivism-algorithm  
+
+They've released their data and code publicly on GitHub, which is good practice for data journalism and data science: https://github.com/propublica/compas-analysis  
+
+Look through the article and use it to answer these questions.  
+  
+**Question 2.1. What's the main take home for this article? What do they want readers to understand?**  
+
+**Question 2.2. How was data important to the work these journalists did?**  
+
+**Question 2.3. Interpret the charts labeled "Black Defendants' Risk Scores" and "White Defendants' Risk Scores." What is the message of those visualization? If I told you that the authors used ggplot to make them, what 'geom' function do you think they used? Why?**   
+
+## Setup  
+
+You can use `read_csv` to read a CSV file from an online location by providing a URL instead of a file path. We'll do that instead of downloading the COMPAS data from the repository manually. In this case, the data we'll download saves NA values in a way that we want to change. That means you'll need to pass an extra argument `na = c("NA", "N/A"))` after the URL.  
+
+**Question 2.4. Prepare your R environment by loading the tidyverse, then reading the csv file at this URL:"https://raw.githubusercontent.com/propublica/compas-analysis/master/compas-scores-two-years.csv" and assigning the data frame to the name 'compas.'**  
+(check the hints if you have trouble)  
+
+```{r}
+
+```
+
+
+## Making group comparisons
+
+Together, we'll first write code to compare the distribution of risk scores between Black and White defendants. Our goal is to make something like the bar charts shown about halfway through the 'how we did it' article (https://www.propublica.org/article/how-we-analyzed-the-compas-recidivism-algorithm). 
+
+Here's our analysis plan:
+
+1. Manipulate the data to look at only Black and White defendants
+2. Make a bar chart 
+3. Adjust the plot so that we have separate graphs for Black and White defendants
+4. Improve the look of our graph
+
+**Question 2.5. What's a verb or function do you think we'll need for each step?**
+
+We'll use this code block to work through these four steps together.
+
+```{r}
+# I like to add comments to plan out my work
+
+# Limit data to Black and White race
+# Make a bar chart
+# Get separate frames for each race
+# Make the visualization pretty and easy to read
+```
+
+We'll then compare women and men defendants. 
+
+**Question 2.6. Re-write our above code to compare folks by gender. Do you notice a problem with the graphs?**
+
+```{r}
+
+# Make a bar chart
+# Get separate frames for each gender
+# Make the visualization pretty and easy to read
+```
+
+This isn't a great way to compare the two. Why not? Because the relative sizes of the groups are very different. 
+
+Instead of counts, let's compare *proportions*. To do that, we'll need to use `dplyr` verbs. In module 3 we learned how to use `group_by` to add a grouping structure to a data frame. With `count`, we can count groups by a variable or variables, and then summarizes the number of rows in each group. It's the same as `group_by %>% summarize(n = n()) %>% ungroup()`. 
+
+```{r}
+compas %>% # start with the compas data
+  count(sex, decile_score) %>% # aggregate to counts of how many observations 
+                               # fit into each decile score for each gender.
+                               # the count variable is called "n"
+  group_by(sex) %>% # add a grouping structure to the aggregate data
+  mutate(proportion = n/sum(n)) %>% # create a column of proportions by dividing 
+                                    # the number of women/men who got a particular
+                                    # decile score by the total number of that gender
+  ggplot(aes(x = decile_score, y = proportion)) + # start a plot of our results
+  geom_bar(stat = "identity") + # specify that we don't want ggplot to make counts
+                                # because we've done that already!
+  facet_wrap(~sex) # separate panels by sex
+
+```
+
+Now, it's clear that a larger proportion of women have lower risk scores. 
+
+**Question 2.7. Modify the code above to plot proportions by race, instead of counts. This time, don't filter out any racial groups.**  
+
+```{r}
+
+```
+
+# 3: PASSNYC schools data
+
+The non-profit PASSNYC is interested in improving access to education in New York City and in increasing the diversity of students taking the SHSAT exam for elite public schools. 
+
+They've created a "Data Science for Good" challenge on Kaggle: https://www.kaggle.com/passnyc/data-science-for-good/home
+
+Read the overview for this challenge. We'll download their data and use it for exploratory analysis. 
+
+Optionally, you can read more about testing and segregation in NYC public schools here: https://www.nytimes.com/2018/06/21/nyregion/what-is-the-shsat-exam-and-why-does-it-matter.html
+
+*We're going to do some exploratory data analysis together and then you'll pick a relationship in the data and investigate it on your own.*
+
+## Get and clean the data
+
+To download the data, you'll need to create a Kaggle account. Then log-in, download the data, unzip the files, and put them in your project folder. 
+
+**Question 3.1. Write appropriate code to read the data into R, and rename the 'N/A' to 'NA' like we did above. Once you've loaded the data, use glimpse to check it out. Do you notice anything odd about the data modes?**
+
+```{r}
+
+```
+
+## Advanced Mutate
+
+If we look at the glimpse of the data, we'll see that some columns that we'd expect to have numeric data, like 'percent ELL' are character strings instead. If we look at the values, we can see that the strings are things like "9%", "5%", and "15%". Now we need to extract only the numbers of these strings and save them as numeric columns. There are lots of ways to solve this problem. One of the easiest is to use `parse_number`. Below is an example.
+
+```{r}
+percent_example <- c("9%", "5%", "15%", "7%", "3%", "6%", "1%")
+typeof(percent_example)
+percent <- parse_number(percent_example)
+percent
+```
+
+**Question 3.2. Now we need to extract only the numeric portion of the whole column. Clean up the 'percent ELL' column using mutate(), following the example above.**
+
+```{r}
+
+```
+
+Unfortunately, that's not the only column that we need to change. Fortunately mutate has a sibling function called `mutate_at` which lets us specify groups of columns and apply a function to them.
+
+**Question 3.3. Use mutate_at to change all the columns that start with 'Percent' so that they're numeric.**
+
+Read the docs for mutate_at.
+
+```{r}
+
+```
+
+**Question 3.4. What other columns need to be modified? Write new lines of mutate_at for each column or group of columns that needs to be modified. Assign a the variable name 'schools' to the modified data frame**
+```{r}
+
+```
+
+
+## Scatterplots and smoothing
+
+Ok, now that our data is nice and clean, we can do some exploration. 
+
+**Question 3.5 Look through the school data again and make a list of variables that you think would be interesting to explore. Are there any pairs that look interesting to consider together?**
+
+We'll take a few examples and look at the association or *covariation* between two variables. We'll look first at student attendance, then at the connection between economic need and race, and finally you'll examine some variables of your own.
+
+**Question 3.6. what do you think will be the relationship between overall attendance rate `Student Attendance Rate` and chronically absent students `Percent of Students Chronically Absent`?**
+
+Hypothesis:
+
+Let's test it~
+
+Notice that variable names can't normally have spaces in them! Since these do, we surround the names with backticks (``). 
+
+```{r}
+schools %>% # take our modified data
+  ggplot(aes(x = `Percent of Students Chronically Absent`, 
+             y = `Student Attendance Rate`)) + # map variables to x and y
+  geom_point(alpha = .5) + # make a scatterplot, increasing transparency to show 
+                           # when points fall in the same place
+  geom_smooth() # plot a trendline using the default method, 'gam' in this case
+```
+
+One school apparently has 0% attendance, that seems unlikely so we're justified in dropping that observation. If we filter out this outlier, then the trend is basically linear. 
+
+```{r}
+schools %>%
+  filter(`Percent of Students Chronically Absent` != 100) %>% # add a filter to get rid of the outlier
+  ggplot(aes(x = `Percent of Students Chronically Absent`, # otherwise the code is the same as above
+             y = `Student Attendance Rate`)) + 
+  geom_point(alpha = .5) + 
+  geom_smooth()
+```
+
+**Question 3.7.Interpret our results**
+
+## Hypothesis testing: economic need and race
+
+**Question 3.8. what do you think will be the relationship between the proportion of students who are white `Percent White` and how much economic need is present in the school `Economic Need Index`?**
+
+Hypothesis:
+
+Let's test it~
+
+These plots are based on a kernel by Randy Lao: https://www.kaggle.com/randylaosat/simple-exploratory-data-analysis-passnyc
+
+
+```{r}
+schools %>% # take the schools data
+  ggplot(aes(x = `Economic Need Index`, y = `Percent White`)) + # map our variables
+  geom_point() + # plot the scatter
+  geom_smooth() # and the smoothed line
+```
+
+**Question 3.9. How could we expend this analysis? What other variables could we include?**
+
+
+# 4: Self Exploration
+
+Now you need to get in touch with the deepest parts of yourself through silent meditation.
+
+Just kidding, you'll have the chance to explore an aspect of either the PASSNYC or COMPAS data on your own.
+
+**Question 4.1. Which dataset are you interested in looking at? What drew you to that data?**  
+
+**Question 4.2. Explore the variables in the data you picked. Which variables seem like they might address your interest? What types of data are they? Make a plot for each showing its variation.**
+
+```{r}
+
+```
+
+**Question 4.3. Given what you know about the data and the variation of those two variables, write a hypothesis about their relationship.**
+
+Hypothesis:
+
+**Question 4.4. Investigate the covariation between your two variables with a scatterplot**  
+
+- Add a trend, either a curve (the default `geom_smooth()`) or a straight line (`geom_smooth(method = "lm")`)
+- Add proper titles
+- Consider changing the theme
+
+```{r}
+
+```
+
+# 5 Challenge: run and visualize a model
+
+Statistical models in R use a formula syntax (`z ~ x + y`). `lm` and `glm` are common modeling functions. Try out models incorporating multiple covariates on either of today's data sets. Print a summary of the results, and, if you're ambitious, try to visualize them. See http://socviz.co/modeling.html and http://r4ds.had.co.nz/model-basics.html for how to do that.
+
+```{r}
+fit1 <- lm(decile_score ~ race + sex, data = filter(compas, decile_score != -1))
+summary(fit1)
+```
+
+
+
+Hints
+
+2.4 Your code should look like this:
+
+```{r}
+compas <- 
+  read_csv("https://raw.githubusercontent.com/propublica/compas-analysis/master/compas-scores-two-years.csv", 
+           na = c("NA", "N/A"))
+```
+
+3.4 `mutate_at` needs two arguments to work for us here, we have to tell it what variables to use by calling vars(starts_with("Percent")), then we need to tell it what function to use by writing parse_number.
+
+3.5 Code for 3.1-5 could look like this:
+
+```{r}
+schools_raw <- 
+  read_csv("data/2016 School Explorer.csv", 
+           na = c("NA", "N/A", ""))
+
+schools <- 
+  schools_raw %>%
+  mutate_at(vars(starts_with("Percent")), parse_number) %>%
+  mutate_at(vars(ends_with("%")), parse_number) %>%
+  mutate_at(vars(ends_with("Rate")), parse_number) %>%
+  mutate(`School Income Estimate` = parse_number(`School Income Estimate`))
+```
+
+4.2 These will be bar plots if your data is categorical, histograms if it's continuous. If the data is categorical but has lots of different values, you should consider combining categories using factors.
+
+# References
+Chapter 7, Exploratory Data Analysis, of [R for Data Science](http://r4ds.had.co.nz/exploratory-data-analysis.html)
+
+Data Visualization: A Practical Introduction, [Chapter 5](http://socviz.co/workgeoms.html), [Chapter 6](http://socviz.co/modeling.html)

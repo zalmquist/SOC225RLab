@@ -1,0 +1,197 @@
+---
+title: "Lab7: Exploratory data analysis I"
+subtitle: "Soc 225: Data & Society"
+author: "[PUT YOUR NAME HERE]"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: true
+---
+
+# Agenda
+- Introduction and setup
+- Data pre-processing
+- Exploratory data analysis
+  - Variation along a single variable
+  - Covariation of multiple variables
+
+# 1: Introduction and setup
+
+Exploratory data analysis, especially data visualization, is a way of understanding patterns and uncertainty in a data set. You can look at variation in the distribution of a single variable, and/or covariation across multiple variables. The best way to visualize covariation depends on whether your variables are categorical or numeric. This website has an elegant flow chart and examples: https://www.data-to-viz.com/
+
+We'll practice doing this with a dataset on default of credit card clients. This module's exercises are inspired by the following kaggle challenge: https://www.kaggle.com/csafrit2/6201-credit-card-loan-analysis
+
+This dataset contains information on default payments, demographic factors, credit data, history of payment, and bill statements of credit card clients in Taiwan from April 2005 to September 2005. 
+
+**Question 1.1. Prepare your R environment by loading the tidyverse, then reading the csv file. Assign the data frame to the name 'credit'.**
+
+```{r}
+
+```
+**Question 1.2. In the below chunk, write code to check data dimensions, rows and columns. Check column names, datatype(s) and data info.**
+```{r}
+
+```
+
+In this module we'll use the credit data set to explore questions that help us get a sense of algorithmic decision making, such as:
+- How does the probability of default payment vary by categories of different demographic variables?
+- Which variables are the strongest predictors of default payment?
+
+**Question 1.3. Take a look at the dataset information [here](https://www.kaggle.com/uciml/default-of-credit-card-clients-dataset). Which variables do you think would correlate with default payment? In other words, which variables do you expect to *covariate* with default payment?**
+
+# 2. Data pre-processing
+
+Real-world data is often incomplete, inconsistent, and/or lacking in certain behaviors or trends, and is likely to contain many errors. Data preprocessing is a necessary step to resolving these issues before we conduct exploratory data analysis. 
+
+Here, we'll set categorical value as factors and reassign values based on data set key. Factor variables are categorical variables that can be either numeric or string variables. The most important advantage of converting categorical variables to factors is that they can be used in statistical modeling where they'll be implemented correctly, i.e. they'll be assigned the correct number of degrees of freedom. For more on factor variables, refer to this [website](https://stats.idre.ucla.edu/r/modules/factor-variables/). 
+
+```{r}
+credit$ID <- NULL # remove the ID column that is not useful for our analysis
+colnames(credit)[24]<-"DEFAULT" # assign new name of the 24th column of the data frame 
+credit$DEFAULT <- as.factor(ifelse(credit$DEFAULT == 1, "Yes", "No")) # convert variable DEFAULT into factor and re-assign values
+```
+
+**Question 2.1. Following the example above, convert variable 'SEX' into factor variable. Re-assign value 1 as "Male" and 2 as "Female".**
+
+```{r}
+
+```
+
+**Question 2.2. Following the example above, convert variable 'MARRIAGE' into factor variable. Re-assign value 1 as "Married", 2 as "Single" and others as "Other".**
+
+```{r}
+
+```
+
+**Question 2.3. Following the example above, convert variable 'EDUCATION' into factor variable. Re-assign value 1 as "Graduate_School", 2 as "College", 3 as "High_School", and 4 as "Other", and others as "Unknown".**
+```{r}
+
+```
+
+**Question 2.4. Convert variables 'PAY_0', 'PAY_2', 'PAY_3', 'PAY_4', 'PAY_5', 'PAY_6' as factors.**
+```{r}
+
+```
+
+**Question 2.5. Check to see if the changes you made are as expected.**
+```{r}
+
+```
+
+# 3. Exploratory data analysis
+
+Now we have cleaned the data set, we are able to explore and analyze the data. First, let's look at distributions of single variables. What type of graph would you choose to show the distribution of `SEX`, `EDUCATION` and `MARRIAGE`?
+
+## Variation along a single variable
+```{r}
+edu <- ggplot(credit, aes(EDUCATION, fill = EDUCATION)) + 
+geom_bar() + scale_fill_brewer(palette = "Paired")+
+  ggtitle("Distribution of Education Attainment")
+edu
+```
+
+**Question 3.1. Plot the distributions of MARRIAGE and SEX, each variable with one graph. What do you find?**
+```{r}
+
+```
+
+We can check the proportion of population that default:
+```{r}
+prop.table(table(credit$DEFAULT))
+```
+
+## Covariation of multiple variables
+
+Now we can take a look at covariation between two demographic variables. 
+```{r}
+# plotting age vs. gender
+age_gender <- ggplot(credit, aes(AGE, fill=SEX))+
+  geom_histogram(binwidth = 0.75)+
+  ggtitle("Distribution of Age and Gender")
+age_gender
+```
+
+**Question 3.2. Choose an appropriate visualization to plot the distribution of EDUCATION and SEX together. What do you find?**
+```{r}
+
+```
+
+
+**Question 3.3. What is the average age of the population?**
+```{r}
+
+```
+
+A quantile-quantile graph is used to determine whether a range of numbers follows a certain distribution: the closer the data points are to being a straight-line, the closer the data is to the distribution (the default distribution is normal). 
+
+```{r}
+# visualize credit limits. 
+limit <- ggplot(credit,aes(sample=LIMIT_BAL)) + 
+geom_qq()+
+  geom_qq_line(color="red")+ # compute the slope and intercept of the line connecting the points at specified quartiles of the theoretical and sample distributions.
+  ggtitle("Credit Limits")
+limit
+```
+
+The qqplot tells us that the distribution of credit limits is skewed with both upper and bottom ends deviating from the straight line. There is also an outlier of 1,000,000. For more explanation on interpreting qqplot, visit this [website](https://towardsdatascience.com/q-q-plots-explained-5aa8495426c0).
+
+**Question 3.4. Plot the covariation between credit limits and education attainment. What do you find?**
+```{r}
+
+```
+
+**Question 3.5. Now, compare credit limit with two demographic variables such as marriage and education attainment, or sex and education attainment. How would you visualize the relationship?**
+(Check hints if you have troubles)
+```{r}
+
+```
+
+**Question 3.6. Improve your plot in Question 3.5. Add appropriate x and y labels, title of the plot and tilt the direction of your x label if necessary. What does the plot tell?**
+
+```{r}
+
+```
+
+**Question 3.7. Now think about the possible relationship between credit limit and default behavior. What do you expect to find? Visualize the relationship with an appropriate type of plot.** 
+(check the hints if you have trouble)
+```{r}
+
+```
+
+We'll go a step further to think about the possible relationship between education attainment, credit limit and default behavior. 
+```{r}
+# p <- ggplot(credit, aes(x=DEFAULT, y=LIMIT_BAL, fill = DEFAULT)) + 
+# geom_violin() + # a compact display of a continuous distribution
+# facet_wrap(~EDUCATION) + # separate panels by EDUCATION
+# xlab("Default behavior") + 
+# ylab("Credit limit") + 
+# ggtitle("Default behavior by credit limit and educatioin attainment")
+# p
+```
+**Question 3.8. What do you find from the above graph?**
+
+**Question 3.9. Finally, try the `dplyr` *verbs* we learned in previous modules to verify your findings. For example, what is the mean credit limit of population who default and who do not default? You can further break the group down by demographic variables.**
+(Check the hints if you have trouble)
+```{r}
+
+```
+
+**Question 3.10. Now think about the questions we had in the beginning about factors relating to default behavior. What would be your answer based on data and analyses we just worked on?**
+
+
+Hints
+3.5. An example would be like this:
+```{r}
+limit4 <- ggplot(credit,aes(x=EDUCATION, y=LIMIT_BAL,fill=EDUCATION))+geom_boxplot() + facet_wrap(~MARRIAGE) +theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+
+```
+
+3.7. Try geom_boxplot() or geom_violin(). 
+
+3.9. Verbs such as `group_by` and `summarize` will be useful here.
+
+
+# References
+[Data Preprocessing: 6 necessary steps for data scientists](https://hackernoon.com/what-steps-should-one-take-while-doing-data-preprocessing-502c993e1caa)
+[Factor Variables](https://stats.idre.ucla.edu/r/modules/factor-variables/)
+[geom_qq in ggplot2](https://plotly.com/ggplot2/geom_qq/)

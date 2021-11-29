@@ -1,0 +1,167 @@
+---
+title: "Lab6: Google Trend and Search"
+subtitle: "Soc 225: Data & Society"
+author: "[PUT YOUR NAME HERE]"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: true
+---
+
+# Agenda
+- Google Trends
+  - Single term
+  - Comparing multiple terms
+  - Mapping search data from Google Trends
+  - Embedding a Google Trends widget
+- Google Ngrams
+- Challenge: Google Takeout
+
+# Google Trends:
+
+## 1. Single term
+
+Go to Google Trends (https://trends.google.com/trends/?geo=US) and search for "crisis actors." Look at variation by time and by region. 
+
+**Question 1.1: why is there a spike in mid-February?** Look at the related topics and queries for hints at the answer.
+
+
+## 2. Comparison
+
+Compare the relative popularity of the following social media platforms using Google Trends: Facebook, Twitter, Instagram, and YouTube. 
+
+**Question 2.1. According to Google Trends, what is the order of popularity for these platforms?**
+
+**Question 2.2. Do you think volume of Google searches is a good metric of social media use?**
+
+**Question 2.3. Come up with a set of search terms that you think would make an interesting comparison, and describe your results here.**
+
+## 3. Mapping search data from Google Trends
+
+In this section we'll learn how to get and visualize Google search data with both time and geographical components using the packages `gtrendsR`. In this example, we'll look at search interest for named hurricanes that hit the U.S. mainland and then plot how often different states search for "guns".
+
+**Question 3.1. Install and load package `gtrendsR`. Load package `tidyverse`.**
+
+```{r}
+
+```
+
+Let's first look at how the impact of hurricanes Katrina (August 2005) and Harvey (August 2017) are reflected in how Americans have used these names as google search items over time. 
+
+The `gprop` argument controls whether we want general web, news, image or Youtube searches. 
+
+The `time` argument is set to "all" and will gather data between 2004 and the time the code is run. 
+
+Focusing on searches made in the U.S., we'll set the geo argument to "US". 
+```{r}
+# hurricanes <- gtrends(c("katrina","harvey"), time = "all", gprop = "web", geo = c("US"))
+```
+
+**Question 3.2. Take a glimpse at `hurricanes`. What does `gtrends` function actually returns?**
+
+We plot the output:
+```{r}
+# plot(hurricanes) + 
+#   geom_line(size = 0.5) 
+```
+The above plot shows clear spikes around the time when Katrina and Harvey hit the US. To understand what is actually measured on the y-axis, have a look [here](https://support.google.com/trends/answer/4365533?hl=en). 
+
+We could also plot more cyclical data using the same method. 
+
+**Question 3.3. Make and plot ten years' worth of search data from 2008-01-01 to 2018-01-01 in US for "spring break" and "vacation".**
+
+```{r}
+
+```
+
+**Question 3.4. What do you find about search data for "spring break" and "vacation"? Do you find concurrence between the searches of these two terms?**
+
+Next, let's compare the amount of interest in guns for each US state. 
+
+**Question 3.5. Create an object "guns" that fetches google web search of word "guns" in US for all time. Take a glimpse at `guns`.**
+```{r}
+
+```
+
+We then create a data frame with class `tbl_df` out of `interest_by_region` under `guns`.
+
+```{r}
+# gunsInterestByRegion <- as_tibble(guns$interest_by_region)
+```
+
+Next, create an object `statesMap` that fetches an empty map for plotting our geographical data. 
+```{r}
+# statesMap = map_data("state")
+```
+
+We'll next join `gunsInterestByRegion` with `statesMap`. 
+
+**Question 3.6. Which columns in these two data frames could be used as keys to join? Are the labels identical under these two columns?**
+
+
+We change the capitalized state names to lowercase using `stringr`. 
+```{r}
+# gunsInterestByRegion <- gunsInterestByRegion %>% 
+#  mutate(region = str_to_lower(location))
+```
+
+**Question 3.7. Join `gunsInterestByRegion` with `statesMap`. Name the new object `gunsMerged`. Take a glimpse.**
+
+
+```{r}
+
+```
+
+**Question 3.8. Use `gunsMerged`, create a map that shows Google search interest for guns in each state using `ggplot` and `geom_polygon`. Fill the map with the log of `hits`. Properly name your map.**
+
+```{r}
+# I like to add comments to plan out my work
+
+# create a ggplot object with x being longitude and y being latitude
+# add a map layer, group and fill the map properly
+# add a title to the map
+# Make the visualization pretty and easy to read
+```
+**Question 3.9. What do you find about the search interests of `guns` in different states? How do you explain your findings?**
+
+## 4. Embedding a Google Trends widget
+
+You can embed a Google Trends widget as an interactive object, but the steps are a little tricky: 
+
+1. In Google Trends, click the "Embed" button ("< >") and copy the code
+2. Paste it into your Rmd file, and knit to html
+3. Open the html in Chrome
+4. Inspect the chart, and copy the "iframe" element
+5. Paste *that* into your Rmd file, and delete the original script
+6. Add a height to the iframe (e.g. height="450px")
+7. Regenerate and reopen the html
+
+
+The final result should look like this (open html in Chrome): 
+
+<iframe id="trends-widget-1" src="https://trends.google.com:443/trends/embed/explore/TIMESERIES?req=%7B%22comparisonItem%22%3A%5B%7B%22keyword%22%3A%22crisis%20actors%22%2C%22geo%22%3A%22US%22%2C%22time%22%3A%22today%2012-m%22%7D%5D%2C%22category%22%3A0%2C%22property%22%3A%22%22%7D&amp;tz=420&amp;eq=q%3Dcrisis%2520actors%26geo%3DUS%26date%3Dtoday%2012-m" width="100%" frameborder="0" scrolling="0" height="450px"></iframe>
+
+**Question 4.1. Below, embed one of the charts from your Google Trends search in the previous question.**
+
+# 5. Google Ngrams
+The Google Ngram Viewer draws on Google Books to show the use of terms over time. It has some interesting uses, especially in digital humanities, but with important caveats: https://www.wired.com/2015/10/pitfalls-of-studying-language-with-google-ngram/
+
+(What's a n-gram? A sequence of one or more words.)
+
+Try looking at references to different communications technologies, e.g., the Internet, TV, and radio. Do the results change if you make the searches case-insensitive?
+
+<iframe name="ngram_chart" src="https://books.google.com/ngrams/interactive_chart?content=Internet%2CTV%2Cradio&case_insensitive=on&year_start=1800&year_end=2008&corpus=15&smoothing=3&share=&direct_url=t4%3B%2CInternet%3B%2Cc0%3B%2Cs0%3B%3BInternet%3B%2Cc0%3B%3Binternet%3B%2Cc0%3B%3BINTERNET%3B%2Cc0%3B.t4%3B%2CTV%3B%2Cc0%3B%2Cs0%3B%3BTV%3B%2Cc0%3B%3Btv%3B%2Cc0%3B%3BtV%3B%2Cc0%3B%3BTv%3B%2Cc0%3B.t4%3B%2Cradio%3B%2Cc0%3B%2Cs0%3B%3Bradio%3B%2Cc0%3B%3BRadio%3B%2Cc0%3B%3BRADIO%3B%2Cc0" width=900 height=500 marginwidth=0 marginheight=0 hspace=0 vspace=0 frameborder=0 scrolling=no></iframe>
+
+
+**Question 5.1. Search for another set of terms of interest, and embed the results below.** (See this article for some examples: http://techland.time.com/2014/01/16/google-books-ngram-viewer/)
+
+# 6. Challenge: Google Takeout
+
+Download some of your own data from Google Takeout: https://takeout.google.com/settings/takeout
+
+I recommend only picking one or two applications! Otherwise, your download file will be very large. Read this Twitter thread for some examples: https://twitter.com/iamdylancurran/status/977559925680467968
+
+Look at your Google data, and describe the data structure. See if you can read some of the files into R.
+
+# References
+Peer Christensen, [Mapping search data from Google Trends in R](https://www.storybench.org/mapping-search-data-from-google-trends-in-r/)

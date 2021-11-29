@@ -1,0 +1,188 @@
+---
+title: 'Lab1: R, Rstudio and R Markdown'
+author: '[PUT YOUR NAME HERE]'
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: yes
+  pdf_document:
+    toc: yes
+subtitle: 'Soc 225: Data & Society'
+---
+
+# Agenda
+  - Getting started: Editing and running code
+  - Functions and help
+  - Objects
+  - Basics about R Markdown
+
+# 1: Getting started: Editing and running code
+
+There are several ways we can run code:
+
+  - Highlight lines in the editor window and click **Run** at the top or hit `Ctrl` + `Enter` or `CMD` + `Enter` (Mac) to run them all.
+  - With your caret on a line you want to run, hit `Ctrl` + `Enter` or `CMD` + `Enter` (Mac). Note your caret moves to the next line, so you can run code sequentially with repeated presses. 
+  - Type individual lines in the console and press enter. 
+  - In R Markdown documents, click within a code chunk and click the green arrow to run the chunk. The button beside that runs all prior chunks. 
+  
+**Question 1.1: run the following lines of code.**
+
+```{r}
+123 + 456 + 789
+sqrt(400)
+```
+
+Now run the following code in console: (11-2. This code obviously is incomplete. What do you see in your console?
+
+You may notice that here, R is used as a calculator. Now, follow the instructions on this website [R as a calculator](https://sphweb.bumc.bu.edu/otlt/MPH-Modules/BS/R/R1_GettingStarted/R1_GettingStarted3.html) and play out with calculation in the console. 
+  
+# 2: Functions and help
+
+`sqrt()` is an example of a function in R. 
+
+If we didn't have a good guess as to what `sqrt()` will do, we can type `?sqrt` in the console and look at the **Help** panel on the right. 
+
+**Question 2.1: looking at the Help file of function sqrt().**
+
+```{r}
+
+```
+
+**Argument** are inputs to a function. In this case, the only argument to `sqrt()` is x which can be a number or a vector of numbers.
+
+Help files provide documentation on how to use functions and what functions produce. 
+
+# 3: Objects
+
+R stores everything as an object, including data, functions, models, and output. 
+
+Creating an object can be done using the assignment operator: `<-`
+When you're typing inside of a code chunk (that's where the code goes), you can use `alt` plus `the minus key` to quickly type the arrow. 
+
+**Question 3.1: Create an new object called "new_object". Assign value 144 to it.**
+
+```{r}
+new_object <- 144
+```
+Operators like `<-` are functions that look like symbols but typically sit between their arguments (e.g. numbers or objects) instead of having them inside () like in `sqrt()`.
+
+You can display or "call" an object simply by using its name:
+```{r}
+new_object
+```
+
+An object's name represents the information stored in that object, so you can treat the object's name as if it were the values stored inside. 
+```{r}
+new_object + 10
+```
+
+```{r}
+new_object + new_object
+```
+
+Next, we are going to create a vector. A vector is a series of elements, such as numbers. You can create a vector and store it as an object in the same way. To do this, use the function `c()` which stands for "combine" or "concatenate".
+
+```{r}
+new_object <- c(4,9,16,25,36)
+new_object
+```
+
+If you name an object the same name as an existing object, it will overwrite it. 
+
+**Question 3.2: calculate the square root of vector `new_object`.**
+
+```{r}
+
+```
+
+The same principles can be used to create more complex objects like matrices, arrays, lists and dataframes (lists of equal-length vectors). Each element of the dataframe can be thought of as a column, and the length of each element is the number of rows. 
+
+Most data sets we work with will be read into R and stored as a dataframe, so the labs will mainly focus on working with these objects. 
+
+Let's take a look at an example of data on covid-19. To do so, we will first have to install a package called "coronavirus", developed by the Johns Hopkins University. Packages contain premade functions and/or data we can use. It is R's strength that there are a wide variety of packages!
+
+```{r}
+#install.packages("coronavirus") # only install once, don't re-install until you update R
+```
+
+The package name here is a search term, i.e.text, not an object, so we must use quotation marks. 
+
+We then use command `library()` to load the package, and `data()` command to take a look at the built-in dataset. To take a deeper look at the package, visit [Package 'coronavirus'](https://cran.r-project.org/web/packages/coronavirus/coronavirus.pdf).
+
+```{r}
+library(coronavirus)
+data(coronavirus)
+```
+
+This dataset contains the daily summary of Coronavirus cases (confirmed, death, and recovered), by state/province. Let's view the dataset.
+
+# 4: Basics about R Markdown
+
+This is a R Markdown file. The Markdown file enables document analyses by combining text, code and output, so that you don't have to copy and paste into word. You can control the amount of code to display in your file, and it is easy for collaborators to understand. 
+
+R Markdown is able to produce various document types such as HTML, PDF, Word, Powerpoint and Presentation slides. It also works with LaTex and HTML for mathematics and other format control. 
+
+Let's first look at the header of an .Rmd file, a [YAML](http://yaml.org) code block. 
+
+Inside R Markdown, R code are written into chunks. Code is sandwiched between sets of three backticks and `{r}`. Below is a chunk of code:
+
+```{r}
+# point R to the working directory on your computer
+#setwd()
+```
+
+You can make a new code chunk by using the insert menu above, typing the backtics by hand, or by pressing `CMD`+`option`+`i` on a Mac or `CTRL` + `ALT` + `i` on windows or linux.
+
+Chunks have options that control what happens with their code, such as:
+
+* `echo=FALSE`: Keeps R code from being shown in the document. 
+* `eval=FALSE`: Shows R code in the document without running it. 
+* `include=FALSE`: Hides all output but still runs code.
+* `results='hide'`: Hides R's (non-plot) output from the document
+* `cache=TRUE`: Saves results of running that chunk so if it takes a while, you won't have to re-run it each time you re-knit the document.
+* `fig.height=5`, `fig.width=5`: modify the dimensions of any plots that are generated in the chunk (units are in inches). 
+
+**Question 4.1: hide outputs in the chunk where we loaded package.**
+
+Sometimes we want to combine text with values. We do that using code in single backticks starting off with `r`. 
+
+Four score and seven years ago is the same as `r 4*20+7` years. Notice that R could also be used as a calculator.
+
+We are able to reference an object we already saved in a chunk:
+```{r}
+x <- sqrt(77)
+```
+
+The value of `x` rounded to the nearest two decimals is `r round(x,2)`. 
+
+Inserting in-line code with R helps you prevent silly mistakes and makes your coding much more efficient - you don't have to manually update your hard-coded number if the calculation changes. 
+
+**Question 4.2: mix in-line R calculations/references with text. You may not hard-code any numbers referenced.**
+
+Start your text here:
+
+More about RMarkdown: [R Markdown Cheat Sheet](https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf).
+
+**Question 4.3: Taking a look at the cheat sheet, and try to work on the following outputs.**
+
+Italicize this line. 
+
+Make this line bold. 
+
+Strike through this line. 
+
+Create a **block code** of the following poem: "No man is an island, Entire of itself, Every man is a piece of the continent,
+A part of the main."
+
+Finally, how do we take a look at the final output of our Markdown document?
+
+Click on **Knit**, select *Knit to HTML*. 
+
+# References
+[Charles Lanfear, Introduction to R for Social Scientists](https://clanfear.github.io/CSSS508/Lectures/Week1/CSSS508_Week1_RStudio_and_RMarkdown.html#75)
+
+[Managing Data Frames](http://uc-r.github.io/dataframes)
+
+[Short Classic Poems](https://medium.com/@EmEmbarty/31-of-the-best-and-most-famous-short-classic-poems-of-all-time-e445986e6df)
+
+  

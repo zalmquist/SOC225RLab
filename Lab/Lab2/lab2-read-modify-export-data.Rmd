@@ -1,0 +1,185 @@
+---
+title: "lab2: Read, modify and export data"
+subtitle: "Soc 225: Data & Society"
+author: "[PUT YOUR NAME HERE]"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: true
+---
+
+# Agenda
+
+- Open a project file in R
+- Describe the sources of data
+- Read data into R
+- Look at data
+- Subset a dataframe
+- Export data
+
+
+# 1: Opening this file
+
+You'll download all of the lab files for this class as `.zip` files from canvas. To use them, you'll have to unzip them into their own directory (not a temporary directory that lets you explore the files inside), and open the project file. 
+
+You should click on `lab2-read-modify-export-data.Rproj` when you open this lab project. R project files automatically give you access to the files and directories (folders) in the project directory. This makes it much easier for use to load multiple data sets.
+
+# 2: Describe data sources 
+
+Besides a package, the easiest way to work with external data is for it to be stored in a *delimited* text file, e.g. comma-separated values (.csv) or tab-separated values (.tsv). 
+
+In the same directory as this `.Rmd` file and the project file, there's a directory called `data`. Inside, there's a csv file called `seattle_airbnb.csv`. This contains data about 100 Airbnb listings from Seattle. 
+
+These data come from Inside Airbnb, http://insideairbnb.com/. Go to the website and have a look at the About, Behind, and Get the Data pages. *Use what you read to answer the questions below. Just type your answers below the questions.*
+
+  **Question 2.1: What was the _context_ of this data's production, ie:** 
+  
+   - Who created this data set?
+   - How did they do it?
+   - Where did the data come from?
+   - Is this active or passive data collection?
+  
+  **Question 2.2: What were the original purpose of this data? Is that the same as the purpose of the person who collected it? As our purposes?**  
+  
+# 3: Set up and read data into R
+
+The package we'll use today is called "tidyverse." It's a collection of packages for data manipulation, exploration, and visualization.  
+
+You can read more about the tidyverse here: https://www.tidyverse.org/
+
+Follow the instructions we learned in lab 1, install the tidyverse package, then load the package.
+
+```{r}
+
+```
+
+To use data inside R, we first have to import, or *read*, that data into our environment. The chunk below reads the example data we'll use for this module.
+
+```{r}
+airbnb_data <- read_csv("data/seattle_airbnb.csv")
+```
+
+Notice that here, we create an object of a dataframe called "airbnb_data". 
+
+**Question 3.1: What is the role of each component in the above line of code?**
+
+ - airbnb_data: the variable name we used for the data frame
+ - `<-` :
+ - read_csv() :
+ - "data/seattle_airbnb.csv" 
+ 
+# 4: Looking at the data
+
+Let's take a look at the data.   
+
+**Question 4.1 Go ahead and type that into the console.**
+
+You can also look at the entire data set using RStudio's built-in viewer. To use that, we use the function 'View().' We can run that command from the console, or from a code chunk:
+
+**Question 4.2 Follow the instructions in the code block and run it.**
+
+```{r}
+# "un-comment" the line below this one, by removing the '#' and the space
+# View(airbnb_data)
+```
+
+The `head()` function shows you the first six rows of a data frame. 
+
+**Question 4.3 Use the head function in the code chunk below to show the first rows of the airbnb_data.**
+
+```{r}
+
+```
+
+**Question 4.4: `head` shows the first 6 rows by default. Change the following code to show the first 10 rows.** 
+
+```{r}
+head(airbnb_data, n = 6)
+```
+
+What if you want to look at the *last* several rows of a data frame instead of the first several rows?
+
+Let's read the documentation for `head` by typing `?head` into the console.
+
+**Question 4.5 Based on what you found out, show the last 5 rows of airbnb_data**
+
+```{r}
+
+```
+
+You can extract a single column by name using `$`. Type the name of the dataframe (airbnb) first, then `$` and finally the name of the column. 
+
+**Question 4.6 Use `$` to display the 'price' column**
+
+```{r}
+
+```
+
+# 5. Subsetting data
+
+Sometimes we have a large dataset but we only need to work with a subset of it. There are several ways to modify and subset a dataframe. Here, we will learn to subset with indices. 
+
+**Question 5.1: Change the code below so that we load the haven package and make a new object called `twitter_survey` by using the read_sav() function to read the file "data/Pew_Twitter_Study_for_release.sav".**
+
+```{r}
+library(tidyverse)
+airbnb_data <- read_csv("data/seattle_airbnb.csv")
+```
+
+To get a quick look at names of the variables in this data frame, run the below code:
+```{r}
+names(twitter_survey)
+```
+
+There are many variables but we only need three of them: CaseID, TWITTER_USE, VOTED. To manipulate data frames in R, we can use the `[]` notation to access the indices for the observations and the variables. It is easiest to think of the data frame as a rectangle of data where the rows are the observations and the columns are the variables. The indices for a rectangle of data follow the RxC principle; in other words, the first index is for Rows and the second index is for Columns [R, C]. When we only want to subset variables (or columns) we use the second index and leave the first index blank. Leaving an index blank indicates that you want to keep all the elements in that dimension.
+
+```{r}
+twitter_subset <- twitter_survey[,c(1,9,15)]
+```
+
+If the variables we want are in consecutive columns, we can use the colon notation rather than list them using the c function.
+
+```{r}
+twitter_subset2 <- twitter_survey[,1:4]
+```
+
+**Question 5.2: Create a subset of dataframe twitter_subject, taking the first 100 rows and variables PARTY and PPWORK. Assign this object with name "my_twitter_survey".**
+```{r}
+
+```
+
+# 6. Export data
+
+Getting data out of R into a delimited file is very similar to getting it into R:
+```{r}
+write_csv(twitter_subset, file = "twitter_subset.csv")
+```
+
+This saved the data we just modified into a file called `twitter_subset.csv` in your working directory. 
+
+Exporting to a `.csv` drops R metadata, such as whether a variable is a character or factor(which we will learn in the next labs). You can save objects (data frames, lists, etc.) in R formats to preserve this. 
+
+  - `.Rds` format:
+    - Used for single objects, doesn't save original the object name
+    - Save: `write_rds(old_object_name,"path.Rds")`
+    - Load: `new_object_name <- read_rds("path.Rds")
+  
+  - `.Rdata` or `.Rda` format:
+    - Used for saving multiple files where the original object names are preserved
+    - Save: `save(object1, object2,..., file = "path.Rdata")`
+    - Load: `load("path.Rdata")` *without assignment operator*
+    
+**Question 6.1. Save object my_twitter_survey into an `.Rda` file.**
+
+```{r}
+
+```
+
+
+# References
+[Charles Lanfear, Introduction to R for Social Scientists](https://clanfear.github.io/CSSS508/Lectures/Week5/CSSS508_Week5_data_import_export_cleaning.html#27)
+
+[Subsetting data](https://stats.idre.ucla.edu/r/modules/subsetting-data/)
+
+
+
