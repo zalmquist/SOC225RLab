@@ -131,19 +131,18 @@ pas %>%
 
 PurpleAir sensor readings are uploaded to the cloud every 120 seconds where they are stored for download and display on the PurpleAir website. After every interval, the synoptic data is refreshed and the outdated synoptic data is then stored in a *ThingSpeak* database. In order to access the *ThingSpeak* channel API we must first load the synoptic database. 
 
-Let’s look at data from a sensor in the Sydney area for the time period covering the Australian wildfires, December 2019 to January 2020. One of those sensors is labeled “Jannali”.
+Let’s look at data from a sensor in the Australia for the time period covering the . One of those sensors is labeled “Wallerawang”. We will look over the time period 2022-01-01 to 2022-03-01.
 
 ```{r}
-label <- c("Jannali")
-
-pat_jannali <- pat_createNew(
+label <- c("Wallerawang")
+pat_Wallerawang <- pat_createNew(
     pas = pas, 
     label = label, 
-    startdate = 20191229, 
-    enddate = 20200110
+    startdate = 20220101, 
+    enddate = 20220301
   )
 
-save(pat_jannali, file = "pat_jannali.rda")
+save(pat_Wallerawang, file = "pat_Wallerawang.rda")
 ```
 
 ## View a *pat* timeseries
@@ -153,7 +152,7 @@ A `pat` object is a list of two dataframes, one called meta containing spatial m
 The following chunk demonstrates use of the `pat_multiPlot()` function to have a quick look at the data contained in a pat object. The plot shows both A and B channels as well as temperature and humidity. The plotting function is flexible and has options for choosing which channels to display, on the same or individual axes. (Type ?pat_multiPlot to learn more.)
 
 ```{r}
-pat_multiplot(pat_jannali)
+pat_multiplot(pat_Wallerawang)
 ```
 
 In this case we see that the data look good. Channels A and B are both showing lots of PM 2.5 data for “Jannali” over the period of interest. 
@@ -176,8 +175,8 @@ In this case we see that the data look good. Channels A and B are both showing l
 For the purposes of this exploratory example, we are focusing on Australia but maybe we want to filter even more and just look at the sensors within a certain radius of the one we chose in Sydney.
 
 ```{r}
-lon <- pat_jannali$meta$longitude # get the longitude of sensor "jannali"
-lat <- pat_jannali$meta$latitude # get the latitude of sensor "jannali"
+lon <- pat_Wallerawang$meta$longitude # get the longitude of sensor "Wallerawang"
+lat <- pat_Wallerawang$meta$latitude # get the latitude of sensor "Wallerawang"
 
 pas_sydney <- 
   pas_au %>%

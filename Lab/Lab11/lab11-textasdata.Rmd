@@ -95,7 +95,7 @@ str_detect(fruit, "^a")
 How could we use this? If we have a data frame of fruit, then `str_detect` works nicely with `filter`: 
 
 ```{r}
-fruit_data <- data_frame(fruit)
+fruit_data <- tibble(fruit)
 
 fruit_data %>%
   filter(str_detect(fruit, "^a"))
@@ -294,7 +294,7 @@ n_vax/n_total*100
 1.6 Here's one way to do it. We haven't talked about the `purrr` package in the Tidyverse, but it's got some powerful tools like `map_chr`.
 
 ```{r}
-data_frame(best_coast) %>%
+tibble(best_coast) %>%
   mutate(split = str_split(best_coast, ", "), 
          city = map_chr(split, 1), 
          state = map_chr(split, 2)) %>%
