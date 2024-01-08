@@ -10,6 +10,14 @@ output:
 subtitle: 'Soc 225: Data & Society'
 ---
 
+```{r,message=FALSE,warning=FALSE}
+## Run this code, to manage packages and install as needed.
+# Install pacman
+if (!require("pacman")) install.packages("pacman", repos = "http://cran.us.r-project.org")
+# p_load function loads packages if installed, or install then loads otherwise
+pacman::p_load(tidyverse,coronavirus)
+```
+
 # Agenda
   - Getting started: Editing and running code
   - Functions and help
@@ -99,7 +107,7 @@ The same principles can be used to create more complex objects like matrices, ar
 
 Most data sets we work with will be read into R and stored as a dataframe, so the labs will mainly focus on working with these objects. 
 
-Let's take a look at an example of data on covid-19. To do so, we will first have to install a package called "coronavirus", developed by the Johns Hopkins University. Packages contain premade functions and/or data we can use. It is R's strength that there are a wide variety of packages!
+Let's take a look at an example of data on covid-19. To do so, we will first have to install a package called "coronavirus", developed by the Johns Hopkins University. Packages contain premade functions and/or data we can use. It is R's strength that there are a wide variety of packages! **Note because we are using a server the package has already been installed for you**
 
 ```{r}
 #install.packages("coronavirus") # only install once, don't re-install until you update R

@@ -14,6 +14,14 @@ Remember to unzip to a real directory before running everything!
 
 Problem 1 should be roughly analogous to what we've done in class, with a few extensions. There are hints at the bottom of this document if you get stuck. If you still can't figure it out, go to google/stack exchange/ask a friend. Finally, email your TA or come to office hours :).
 
+```{r,message=FALSE,warning=FALSE}
+## Run this code, to manage packages and install as needed.
+# Install pacman
+if (!require("pacman")) install.packages("pacman", repos = "http://cran.us.r-project.org")
+# p_load function loads packages if installed, or install then loads otherwise
+pacman::p_load(tidyverse)
+```
+
 # Problem 1: Piping Hot Variables
 
 *This problem uses `dplyr` verbs to answer questions about an Airbnb data set.* 

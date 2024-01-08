@@ -12,6 +12,14 @@ Write all code in the chunks provided. Complete this `.Rmd` file and knit it int
 
 Remember to unzip to a real directory before running everything!
 
+```{r,message=FALSE,warning=FALSE}
+## Run this code, to manage packages and install as needed.
+# Install pacman
+if (!require("pacman")) install.packages("pacman", repos = "http://cran.us.r-project.org")
+# p_load function loads packages if installed, or install then loads otherwise
+pacman::p_load(tidyverse)
+```
+
 # 1. Basics of R and R markdown
 
 ## 1.1. Create a vector containing elements 10, 22, 27, 19, 20 and assign it with a name. 

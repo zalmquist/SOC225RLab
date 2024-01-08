@@ -8,6 +8,14 @@ output:
     toc: true
 ---
 
+```{r,message=FALSE,warning=FALSE}
+## Run this code, to manage packages and install as needed.
+# Install pacman
+if (!require("pacman")) install.packages("pacman", repos = "http://cran.us.r-project.org")
+# p_load function loads packages if installed, or install then loads otherwise
+pacman::p_load(tidyverse)
+```
+
 # Agenda
 
 - Introduction

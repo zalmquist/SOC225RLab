@@ -8,6 +8,15 @@ output:
     toc: true
 ---
 
+
+```{r,message=FALSE,warning=FALSE}
+## Run this code, to manage packages and install as needed.
+# Install pacman
+if (!require("pacman")) install.packages("pacman", repos = "http://cran.us.r-project.org")
+# p_load function loads packages if installed, or install then loads otherwise
+pacman::p_load(tidyverse,gtrendsR)
+```
+
 # Agenda
 - Google Trends
   - Single term
@@ -41,6 +50,8 @@ Compare the relative popularity of the following social media platforms using Go
 In this section we'll learn how to get and visualize Google search data with both time and geographical components using the packages `gtrendsR`. In this example, we'll look at search interest for named hurricanes that hit the U.S. mainland and then plot how often different states search for "guns".
 
 **Question 3.1. Install and load package `gtrendsR`. Load package `tidyverse`.**
+
+**Reminder that pacman script will install the package for you, because we are on server**
 
 ```{r}
 
