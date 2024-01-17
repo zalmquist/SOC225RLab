@@ -8,7 +8,7 @@ output:
     toc: true
 ---
 
-Write all code in the chunks provided!
+Write all code in the chunks provided. Complete this `.Rmd` file and knit it into an `.html`. You must upload the `.html` files for credit. 
 
 Remember to unzip to a real directory before running everything!
 
