@@ -43,7 +43,8 @@ As a first step, we will setup the package and data.
 **Question 1.1: load package tidyverse and read data "data/state_dex_cleaned.csv", assign the object name "state_dex".**
 
 ```{r}
-
+## Un-comment this to knit
+#state_dex<-read_csv("data/state_dex_cleaned.csv")
 ```
 
 We can get a glimpse of object `state_dex` by running the below command:
@@ -304,7 +305,7 @@ It's a good idea to give every plot a *title*, to tell people what it's about.
 state_dex %>% # take state_dex data
   filter(state%in%(c("WA","KS","FL","AZ","NY")) & dex>45) %>% 
   ggplot(aes(x=state)) + # start a plot and set the aesthetics with the x axis the selected states
-  geom_bar() # make a bar chart +
+  geom_bar() + # make a bar chart 
   labs(title = "Number of days with DEX higher than 45 by selected states")
 ```
 
