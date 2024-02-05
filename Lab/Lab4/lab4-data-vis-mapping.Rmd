@@ -13,7 +13,7 @@ output:
 # Install pacman
 if (!require("pacman")) install.packages("pacman", repos = "http://cran.us.r-project.org")
 # p_load function loads packages if installed, or install then loads otherwise
-pacman::p_load(tidyverse)
+pacman::p_load(tidyverse,gapminder,leaflet)
 ```
 
 # Agenda
@@ -195,7 +195,7 @@ The Inside Airbnb data has latitudes and longitudes for each listing, so we'll u
 **Question 4.1: Install leaflet, load it, and then read the file 'data/listings.csv' and name it airbnb_data**
 
 ```{r}
-
+airbnb<-read_csv("data/listings.csv")
 ```
 
 
