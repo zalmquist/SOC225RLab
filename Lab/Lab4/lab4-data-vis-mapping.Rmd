@@ -9,6 +9,8 @@ output:
 ---
 
 ```{r,message=FALSE,warning=FALSE}
+options(download.file.method =  "wget")
+remotes::install_github("jennybc/gapminder")
 ## Run this code, to manage packages and install as needed.
 # Install pacman
 if (!require("pacman")) install.packages("pacman", repos = "http://cran.us.r-project.org")
