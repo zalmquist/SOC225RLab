@@ -159,7 +159,7 @@ For e., we'd recommend using `group_by` + `summarize`. You can group your data b
 1.3 Try using these steps:
 
 - Step 1: identify the variables you need
-  - Listing neighborhood: `neighbourhood`
+  - Listing neighborhood: `neighbourhood_cleansed`
   - Host's neighborhood: `host_neighbourhood`
 
 - Step 2: Filter the data to only include the rows where those variables are not equal. Look back to Module 2 (or look online) if you need a reminder about how to write "equal", "not equal", and so on in R.
