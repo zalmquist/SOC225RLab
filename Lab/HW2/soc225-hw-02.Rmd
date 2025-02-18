@@ -45,7 +45,7 @@ b. Read the detailed Airbnb data into R
 
 *For how many units does the host live in a different neighborhood from the listing? For how many units does the host live in the same neighborhood as the listing?*
 
-Try to figure out which variables to use from their names, and think about which verbs you've learned about might work to answer this question. See the hints at the end if you need help. 
+Try to figure out which variables to use from their names, and many variables/columns are named for neighborhoods. Please be cautious about which variables you should use for this question. Think about which verbs you've learned about might work to answer this question. See the hints at the end if you need help. 
 
 ```{r}
 
