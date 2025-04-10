@@ -169,7 +169,7 @@ Inserting in-line code with R helps you prevent silly mistakes and makes your co
 
 Start your text here:
 
-More about RMarkdown: [R Markdown Cheat Sheet](https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf).
+More about RMarkdown: [R Markdown Cheat Sheet](https://rstudio.github.io/cheatsheets/html/rmarkdown.html).
 
 **Question 4.3: Taking a look at the cheat sheet, and try to work on the following outputs.**
 
