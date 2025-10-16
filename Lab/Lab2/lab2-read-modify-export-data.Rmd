@@ -151,7 +151,7 @@ If the variables we want are in consecutive columns, we can use the colon notati
 twitter_subset2 <- twitter_survey[,1:4]
 ```
 
-**Question 5.2: Create a subset of dataframe twitter_subject, taking the first 100 rows and variables PARTY and PPWORK. Assign this object with name "my_twitter_survey".**
+**Question 5.2: Create a subset of dataframe `twitter_survey`, taking the first 100 rows and variables PARTY and PPWORK. Assign this object with name "my_twitter_survey".**
 ```{r}
 
 ```
