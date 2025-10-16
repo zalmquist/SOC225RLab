@@ -28,7 +28,7 @@ pacman::p_load(tidyverse,haven)
 
 # 1: Opening this file
 
-You'll download all of the lab files for this class as `.zip` files from canvas. To use them, you'll have to unzip them into their own directory (not a temporary directory that lets you explore the files inside), and open the project file. 
+Most data files you need for lab assignments should by available through Jupyter Hub. If you run into any issues accessing a needed data file, please reach out to your TA. 
 
 You should click on `lab2-read-modify-export-data.Rproj` when you open this lab project. R project files automatically give you access to the files and directories (folders) in the project directory. This makes it much easier for use to load multiple data sets.
 
