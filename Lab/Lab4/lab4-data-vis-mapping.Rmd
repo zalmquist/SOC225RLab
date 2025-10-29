@@ -201,7 +201,7 @@ The Inside Airbnb data has latitudes and longitudes for each listing, so we'll u
 **Question 4.1: Install leaflet, load it, and then read the file 'data/listings.csv' and name it airbnb_data**
 
 ```{r}
-airbnb<-read_csv("data/listings.csv")
+airbnb_data<-read_csv("data/listings.csv")
 ```
 
 
