@@ -34,12 +34,12 @@ devtools::install_github("PMassicotte/gtrendsR")
 
 Go to Google Trends (https://trends.google.com/trends/?geo=US) and search for "crisis actors." Look at variation by time and by region. 
 
-**Question 1.1: why is there a spike in mid-February?** Look at the related topics and queries for hints at the answer.
+**Question 1.1: why is there a spike in mid-February, 2018?** Look at the related topics and queries for hints at the answer.
 
 
 ## 2. Comparison
 
-Compare the relative popularity of the following social media platforms using Google Trends: Facebook, Twitter, Instagram, and YouTube. 
+Compare the relative popularity of the following social media platforms using Google Trends: Facebook, Twitter (X), Instagram, and YouTube. 
 
 **Question 2.1. According to Google Trends, what is the order of popularity for these platforms?**
 
@@ -139,6 +139,9 @@ We change the capitalized state names to lowercase using `stringr`.
 
 ## 4. Embedding a Google Trends widget
 
+## NOTE ON THIS SECTION: Google recently broke the Trends embed capability. Opening these links may not work for you
+## If you're seeing error messages, indicate so in 4.1 for credit.
+
 You can embed a Google Trends widget as an interactive object, but the steps are a little tricky: 
 
 1. In Google Trends, click the "Embed" button ("< >") and copy the code
@@ -166,7 +169,7 @@ Try looking at references to different communications technologies, e.g., the In
 <iframe name="ngram_chart" src="https://books.google.com/ngrams/interactive_chart?content=Internet%2CTV%2Cradio&case_insensitive=on&year_start=1800&year_end=2008&corpus=15&smoothing=3&share=&direct_url=t4%3B%2CInternet%3B%2Cc0%3B%2Cs0%3B%3BInternet%3B%2Cc0%3B%3Binternet%3B%2Cc0%3B%3BINTERNET%3B%2Cc0%3B.t4%3B%2CTV%3B%2Cc0%3B%2Cs0%3B%3BTV%3B%2Cc0%3B%3Btv%3B%2Cc0%3B%3BtV%3B%2Cc0%3B%3BTv%3B%2Cc0%3B.t4%3B%2Cradio%3B%2Cc0%3B%2Cs0%3B%3Bradio%3B%2Cc0%3B%3BRadio%3B%2Cc0%3B%3BRADIO%3B%2Cc0" width=900 height=500 marginwidth=0 marginheight=0 hspace=0 vspace=0 frameborder=0 scrolling=no></iframe>
 
 
-**Question 5.1. Search for another set of terms of interest, and embed the results below.** (See this article for some examples: http://techland.time.com/2014/01/16/google-books-ngram-viewer/)
+**Question 5.1. Search for another set of terms of interest, and embed the results below.** (See this article for some examples: https://techland.time.com/2014/01/16/google-books-ngram-viewer/)
 
 # 6. Challenge: Google Takeout
 
