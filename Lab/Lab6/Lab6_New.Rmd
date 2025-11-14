@@ -1,5 +1,5 @@
 ---
-title: "Lab6: Exploring Cultural Trends with Google Ngrams"
+title: "Lab6: Exploring Trends with Google Ngrams"
 subtitle: "Soc 225: Data & Society"
 author: "[PUT YOUR NAME HERE]"
 date: "`r Sys.Date()`"
@@ -97,5 +97,6 @@ Ngrams can help us track the rise and fall of social movements and their associa
 
 
 # Submission Instructions
+
 
 Save your completed lab as an .html file. Make sure all your embedded ngrams are visible in the HTML version when opened in Chrome or your browser.
