@@ -15,7 +15,7 @@ output:
 if (!require("pacman")) install.packages("pacman", repos = "http://cran.us.r-project.org")
 # p_load function loads packages if installed, or install then loads otherwise
 pacman::p_load(tidyverse)
-
+pacman::p_load(maps)
 devtools::install_github("PMassicotte/gtrendsR")
 ```
 
@@ -51,7 +51,7 @@ Compare the relative popularity of the following social media platforms using Go
 
 In this section we'll learn how to get and visualize Google search data with both time and geographical components using the packages `gtrendsR`. In this example, we'll look at search interest for named hurricanes that hit the U.S. mainland and then plot how often different states search for "guns".
 
-**Question 3.1. Install and load package `gtrendsR`. Load package `tidyverse`.**
+**Question 3.1. Load package `gtrendsR`. Load package `tidyverse`. Load package `ggplot2`**
 
 **Reminder that pacman script will install the package for you, because we are on server**
 
@@ -70,18 +70,24 @@ Focusing on searches made in the U.S., we'll set the geo argument to "US".
 # hurricanes <- gtrends(c("katrina","harvey"), time = "all", gprop = "web", geo = c("US"))
 ```
 
-**Question 3.2. Take a glimpse at `hurricanes`. What does `gtrends` function actually returns?**
+Now we can ignore most of that: Google has removed the capability of gtrends to pull data, but the previous TA's for this course helped us out and created an .rda file that includes the records we want. We'll load that in here, use it to create the graphs used in this section.
+
+```{r}
+load("~/COURSE_MATERIALS/Lab/Lab6/gtrends_data.Rda")
+```
+
+**Question 3.2. Take a glimpse at `hurricanes`. What does the `gtrends` function actually return?**
 
 We plot the output:
 ```{r}
-# plot(hurricanes) + 
-#   geom_line(size = 0.5) 
+plot(hurricanes) + 
+  geom_line(size = 0.5) 
 ```
 The above plot shows clear spikes around the time when Katrina and Harvey hit the US. To understand what is actually measured on the y-axis, have a look [here](https://support.google.com/trends/answer/4365533?hl=en). 
 
 We could also plot more cyclical data using the same method. 
 
-**Question 3.3. Make and plot ten years' worth of search data from 2008-01-01 to 2018-01-01 in US for "spring break" and "vacation".**
+**Question 3.3. Make and plot ten years' worth of search data from 2008-01-01 to 2018-01-01 in US for "spring break" and "vacation" using the provided data.**
 
 ```{r}
 
@@ -91,7 +97,7 @@ We could also plot more cyclical data using the same method.
 
 Next, let's compare the amount of interest in guns for each US state. 
 
-**Question 3.5. Create an object "guns" that fetches google web search of word "guns" in US for all time. Take a glimpse at `guns`.**
+**Question 3.5. Use object "guns". Take a glimpse at `guns`.**
 ```{r}
 
 ```
@@ -99,12 +105,12 @@ Next, let's compare the amount of interest in guns for each US state.
 We then create a data frame with class `tbl_df` out of `interest_by_region` under `guns`.
 
 ```{r}
-# gunsInterestByRegion <- as_tibble(guns$interest_by_region)
+gunsInterestByRegion <- as_tibble(guns$interest_by_region)
 ```
 
 Next, create an object `statesMap` that fetches an empty map for plotting our geographical data. 
 ```{r}
-# statesMap = map_data("state")
+statesMap = map_data("state")
 ```
 
 We'll next join `gunsInterestByRegion` with `statesMap`. 
@@ -114,8 +120,8 @@ We'll next join `gunsInterestByRegion` with `statesMap`.
 
 We change the capitalized state names to lowercase using `stringr`. 
 ```{r}
-# gunsInterestByRegion <- gunsInterestByRegion %>% 
-#  mutate(region = str_to_lower(location))
+gunsInterestByRegion <- gunsInterestByRegion %>% 
+ mutate(region = str_to_lower(location))
 ```
 
 **Question 3.7. Join `gunsInterestByRegion` with `statesMap`. Name the new object `gunsMerged`. Take a glimpse.**
@@ -125,7 +131,14 @@ We change the capitalized state names to lowercase using `stringr`.
 
 ```
 
-**Question 3.8. Use `gunsMerged`, create a map that shows Google search interest for guns in each state using `ggplot` and `geom_polygon`. Fill the map with the log of `hits`. Properly name your map.**
+**Question 3.8. Use `gunsMerged`, create a map that shows Google search interest for guns in each state using `ggplot2` and `geom_polygon`. Fill the map with the log of `hits`. Properly name your map. (An example map is provided in the first map, try making your own)**
+
+```{r}
+ggplot(data = statesMap, aes(x = long, y = lat, group = group)) +
+    geom_polygon(fill = "lightblue", color = "white") +
+    labs(title = "Map of US States", x = "Longitude", y = "Latitude") +
+    theme_minimal() # Optional: for a cleaner plot theme
+```
 
 ```{r}
 # I like to add comments to plan out my work
